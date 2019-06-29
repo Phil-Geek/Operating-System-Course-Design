@@ -193,22 +193,21 @@ void WF_insert_freearea(FREEAREA *free_node){
 	 if(p_free_area_list==NULL)
 		 p_free_area_list=free_node;
 	 else{
-           p=p_next=p_free_area_list;
-	   while(p_next!=NULL&&free_node->size<p_next->size){
-		 p=p_next;
-		 p_next=p_next->next;
-	   }
-	   if(p_next==NULL)      
-		 p->next=free_node;
-	   else
-		 if(p==p_next){  
+        p=p_next=p_free_area_list;
+	    while(p_next!=NULL&&free_node->size<p_next->size){
+            p=p_next;
+            p_next=p_next->next;
+	    }
+	    if(p_next==NULL)      
+            p->next=free_node;
+        else if(p==p_next){  
 		    free_node->next=p;
 		    p_free_area_list=free_node;
-		 }
-		 else{           
+		}
+		else{           
 			 free_node->next=p_next;
 			 p->next=free_node;
-		 }
+		}
 	 }
 }
 
@@ -351,8 +350,7 @@ void WF_release_memory(int start_address,int size){
                 p_free_area_list = p_before -> next;
             }
             
-        }
-        if(p_before -> next != NULL && p_before -> next != p_next){
+        }else{
             if(p_before_before!=NULL && p_next_before!= NULL){
                 p_before_before -> next = p_before -> next;
                 p_next_before -> next = p_next -> next;
@@ -366,7 +364,6 @@ void WF_release_memory(int start_address,int size){
                 p_free_area_list = p_next_before -> next;
             }
         }
-        
         WF_insert_freearea(temp);
         return;
         
